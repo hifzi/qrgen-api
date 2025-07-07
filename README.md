@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" alt="QRGen API Logo" width="120" />
+  <img src="logo.png" alt="QRGen API Logo" width="300" />
 </p>
 
 # QRGen API
@@ -13,8 +13,6 @@ A fast and flexible API for generating customizable QR codes with Node.js and Ex
 ---
 
 Welcome to **QRGen API**! This project provides a robust and easy-to-use API for generating QR codes on demand. Built for developers, freelancers, and businesses who need reliable QR code generation with advanced customization.
-
-- **Author:** Hifzi ([github.com/hifzi](https://github.com/hifzi))
 
 ---
 
