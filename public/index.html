@@ -6,80 +6,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRGen API - Test Interface</title>
     <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-dark: #0056b3;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --border-color: #dee2e6;
+            --background-color: #f8f9fa;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f5f5;
+            line-height: 1.6;
         }
 
         .container {
             background: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
-            color: #333;
+            color: var(--primary-color);
             text-align: center;
             margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
         }
 
+        /* Tabs Styling */
+        .tabs {
+            margin-top: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: -2px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form Styling */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
         }
 
         input[type="text"],
-        input[type="url"] {
+        input[type="url"],
+        input[type="number"] {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
             font-size: 16px;
             box-sizing: border-box;
+            transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus,
-        input[type="url"]:focus {
-            border-color: #007bff;
+        input:focus {
+            border-color: var(--primary-color);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
 
         .size-group {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             align-items: center;
         }
 
         .size-group input {
-            width: 80px;
+            width: 100px;
         }
 
         button {
-            background: #007bff;
+            background: var(--primary-color);
             color: white;
-            padding: 12px 30px;
+            padding: 14px 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            background: #0056b3;
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
         }
 
+        /* Results Styling */
         .result {
             margin-top: 30px;
             text-align: center;
@@ -87,42 +145,123 @@
 
         .qr-image {
             max-width: 100%;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
             margin-top: 20px;
-        }
-
-        .error {
-            color: #dc3545;
-            background: #f8d7da;
             padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
+        /* Examples Styling */
         .examples {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
+            background: var(--background-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
         }
 
         .examples h3 {
             margin-top: 0;
-            color: #495057;
+            color: #333;
+            font-size: 1.2em;
         }
 
         .example-item {
             margin: 10px 0;
-            padding: 8px;
+            padding: 12px;
             background: white;
-            border-radius: 3px;
+            border-radius: 8px;
             cursor: pointer;
-            border: 1px solid #ced4da;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .example-item:hover {
-            background: #f8f9fa;
+            background: var(--background-color);
+            transform: translateX(5px);
+            border-color: var(--primary-color);
+        }
+
+        /* API Documentation Styling */
+        .api-docs {
+            padding: 0 20px;
+        }
+
+        .api-section {
+            margin-bottom: 40px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .api-section h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+
+        .api-section code {
+            background: #f1f3f5;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+
+        .api-section pre code {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .api-section pre {
+            background: #2d3748;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+            margin: 15px 0;
+        }
+
+        .error {
+            color: #dc3545;
+            background: #fff5f5;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #f5c2c7;
+        }
+
+        .social-links {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            margin: 0 10px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .social-links img {
+            margin-right: 8px;
+            width: 24px;
+            height: 24px;
         }
     </style>
 </head>
@@ -131,62 +270,122 @@
     <div class="container">
         <h1>🔳 QRGen API</h1>
 
-        <form id="qrForm">
-            <div class="form-group">
-                <label for="data">Data to encode (URL, text, etc.):</label>
-                <input type="text" id="data" name="data" placeholder="Enter URL or text..." required>
+        <div class="tabs">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showTab('generator')">QR Generator</button>
+                <button class="tab-btn" onclick="showTab('docs')">API Documentation</button>
             </div>
 
-            <div class="form-group">
-                <label>Size (pixels):</label>
-                <div class="size-group">
-                    <input type="number" id="width" name="width" value="300" min="50" max="1000" required>
-                    <span>×</span>
-                    <input type="number" id="height" name="height" value="300" min="50" max="1000" required>
-                    <span>pixels</span>
+            <div id="generator" class="tab-content active">
+                <form id="qrForm">
+                    <div class="form-group">
+                        <label for="data">Data to encode (URL, text, etc.):</label>
+                        <input type="text" id="data" name="data" placeholder="Enter URL or text..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Size (pixels):</label>
+                        <div class="size-group">
+                            <input type="number" id="width" name="width" value="300" min="50" max="1000" required>
+                            <span>×</span>
+                            <input type="number" id="height" name="height" value="300" min="50" max="1000" required>
+                            <span>pixels</span>
+                        </div>
+                    </div>
+
+                    <button type="submit">Generate QR Code</button>
+                </form>
+
+                <div class="examples">
+                    <h3>📱 Quick Examples</h3>
+                    <div class="example-item" onclick="fillExample('https://example.com')">
+                        🌐 Website: example.com
+                    </div>
+                    <div class="example-item" onclick="fillExample('Hello World!')">
+                        📝 Text: Hello World!
+                    </div>
+                    <div class="example-item" onclick="fillExample('mailto:admin@example.com')">
+                        📧 Email: admin@example.com
+                    </div>
+                    <div class="example-item" onclick="fillExample('tel:+6281234567890')">
+                        📞 Phone: +6281234567890
+                    </div>
+                </div>
+
+                <div id="result" class="result" style="display: none;">
+                    <h3>Generated QR Code:</h3>
+                    <img id="qrImage" class="qr-image" alt="Generated QR Code">
+                    <br><br>
+                    <a id="downloadLink" href="#" download="qr-code.png">
+                        <button type="button">⬇️ Download PNG</button>
+                    </a>
+                </div>
+
+                <div id="error" class="error" style="display: none;"></div>
+            </div>
+
+            <div id="docs" class="tab-content">
+                <div class="api-docs">
+                    <div class="api-section">
+                        <h3>🖼️ Generate QR Code (PNG Image)</h3>
+                        <p><b>Endpoint:</b> <code>/api/qr</code></p>
+                        <p><b>Method:</b> <code>GET</code></p>
+                        <p><b>Query Parameters:</b></p>
+                        <ul>
+                            <li><code>data</code> <i>(required)</i>: The data to encode in the QR code</li>
+                            <li><code>size</code>: Size in format <code>WIDTHxHEIGHT</code> (default: 300x300)</li>
+                            <li><code>margin</code>: Margin around QR code (0-10, default: 1)</li>
+                            <li><code>errorLevel</code>: Error correction level (<code>L</code>, <code>M</code>, <code>Q</code>, <code>H</code>, default: M)</li>
+                            <li><code>darkColor</code>: Dark color in hex (default: #000000)</li>
+                            <li><code>lightColor</code>: Light color in hex (default: #FFFFFF)</li>
+                        </ul>
+                        <p><b>Example Request:</b></p>
+                        <pre><code>GET /api/qr?data=https://example.com&size=300x300&margin=2&errorLevel=H</code></pre>
+                    </div>
+
+                    <div class="api-section">
+                        <h3>🔤 Generate QR Code (Data URL)</h3>
+                        <p><b>Endpoint:</b> <code>/api/qr/url</code></p>
+                        <p><b>Method:</b> <code>GET</code></p>
+                        <p><b>Query Parameters:</b> <i>Same as above</i></p>
+                        <p><b>Example Request:</b></p>
+                        <pre><code>GET /api/qr/url?data=Hello%20World&size=400x400&margin=1&errorLevel=Q</code></pre>
+                        <p><b>Response:</b></p>
+                        <pre><code>{
+  "success": true,
+  "data": {
+    "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+    "size": "400x400",
+    "content": "Hello World"
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="api-section">
+                        <h3>❌ Error Responses</h3>
+                        <p><b>400 Bad Request:</b></p>
+                        <pre><code>{
+  "error": "Data parameter is required",
+  "example": "/api/qr?data=example.com&size=300x300"
+}</code></pre>
+                        <p><b>500 Internal Server Error:</b></p>
+                        <pre><code>{
+  "error": "Failed to generate QR code",
+  "details": "Error message details"
+}</code></pre>
+                    </div>
                 </div>
             </div>
-
-            <button type="submit">Generate QR Code</button>
-        </form>
-
-        <div class="examples">
-            <h3>Quick Examples:</h3>
-            <div class="example-item" onclick="fillExample('https://example.com')">
-                🌐 Website: example.com
-            </div>
-            <div class="example-item" onclick="fillExample('Hello World!')">
-                📝 Text: Hello World!
-            </div>
-            <div class="example-item" onclick="fillExample('mailto:admin@example.com')">
-                📧 Email: admin@example.com
-            </div>
-            <div class="example-item" onclick="fillExample('tel:+6281234567890')">
-                📞 Phone: +6281234567890
-            </div>
         </div>
 
-        <div id="result" class="result" style="display: none;">
-            <h3>Generated QR Code:</h3>
-            <img id="qrImage" class="qr-image" alt="Generated QR Code">
-            <br><br>
-            <a id="downloadLink" href="#" download="qr-code.png">
-                <button type="button">Download PNG</button>
+        <div class="social-links">
+            <a href="https://github.com/hifzi/qrgen-api" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
+                GitHub
             </a>
-        </div>
-
-        <div id="error" class="error" style="display: none;"></div>
-
-        <div style="text-align:center; margin-top:30px;">
-            <a href="https://github.com/hifzi/qrgen-api" target="_blank"
-                style="margin-right:20px; text-decoration:none; color:#007bff; font-weight:bold;">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub"
-                    width="24" style="vertical-align:middle; margin-right:6px;"> GitHub
-            </a>
-            <a href="https://hub.docker.com/r/hifzirs/qrgen-api" target="_blank"
-                style="text-decoration:none; color:#2496ed; font-weight:bold;">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker"
-                    width="24" style="vertical-align:middle; margin-right:6px;"> Docker Hub
+            <a href="https://hub.docker.com/r/hifzirs/qrgen-api" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker">
+                Docker Hub
             </a>
         </div>
     </div>
@@ -199,6 +398,24 @@
             pathPrefix = '/' + pathParts[1];
         }
         const API_BASE = window.API_BASE || (window.location.protocol + '//' + window.location.host + pathPrefix + '/api/qr');
+
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Activate selected tab button
+            document.querySelector(`.tab-btn[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
 
         document.getElementById('qrForm').addEventListener('submit', async function (e) {
             e.preventDefault();
