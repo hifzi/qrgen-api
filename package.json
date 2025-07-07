@@ -1,0 +1,23 @@
+{
+  "name": "qrgen-api",
+  "version": "1.0.0",
+  "description": "A fast and flexible RESTful API for generating customizable QR codes using Node.js, Express, and the qrcode library.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "node test-api.js",
+    "test:enhanced": "node test-enhanced.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "qrcode": "^1.5.3",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": ["qr-code", "generator", "express", "api"],
+  "author": "Hifzi",
+  "license": "MIT"
+}

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRGen API - Test Interface</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="url"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus, input[type="url"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .size-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .size-group input {
+            width: 80px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .qr-image {
+            max-width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .examples {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .examples h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .example-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 1px solid #ced4da;
+        }
+        .example-item:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔳 QRGen API</h1>
+        
+        <form id="qrForm">
+            <div class="form-group">
+                <label for="data">Data to encode (URL, text, etc.):</label>
+                <input type="text" id="data" name="data" placeholder="Enter URL or text..." required>
+            </div>
+            
+            <div class="form-group">
+                <label>Size (pixels):</label>
+                <div class="size-group">
+                    <input type="number" id="width" name="width" value="300" min="50" max="1000" required>
+                    <span>×</span>
+                    <input type="number" id="height" name="height" value="300" min="50" max="1000" required>
+                    <span>pixels</span>
+                </div>
+            </div>
+            
+            <button type="submit">Generate QR Code</button>
+        </form>
+
+        <div class="examples">
+            <h3>Quick Examples:</h3>
+            <div class="example-item" onclick="fillExample('https://example.com')">
+                🌐 Website: example.com
+            </div>
+            <div class="example-item" onclick="fillExample('Hello World!')">
+                📝 Text: Hello World!
+            </div>
+            <div class="example-item" onclick="fillExample('mailto:admin@example.com')">
+                📧 Email: admin@example.com
+            </div>
+            <div class="example-item" onclick="fillExample('tel:+6281234567890')">
+                📞 Phone: +6281234567890
+            </div>
+        </div>
+        
+        <div id="result" class="result" style="display: none;">
+            <h3>Generated QR Code:</h3>
+            <img id="qrImage" class="qr-image" alt="Generated QR Code">
+            <br><br>
+            <a id="downloadLink" href="#" download="qr-code.png">
+                <button type="button">Download PNG</button>
+            </a>
+        </div>
+        
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <div style="text-align:center; margin-top:30px;">
+            <a href="https://github.com/hifzi/qrgen-api" target="_blank" style="margin-right:20px; text-decoration:none; color:#007bff; font-weight:bold;">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" width="24" style="vertical-align:middle; margin-right:6px;"> GitHub
+            </a>
+            <a href="https://hub.docker.com/r/hifzirs/qrgen-api" target="_blank" style="text-decoration:none; color:#2496ed; font-weight:bold;">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" width="24" style="vertical-align:middle; margin-right:6px;"> Docker Hub
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Dynamic API base URL
+        const API_BASE = window.API_BASE || (window.location.protocol + '//' + window.location.host + '/api/qr');
+        
+        document.getElementById('qrForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const data = document.getElementById('data').value;
+            const width = document.getElementById('width').value;
+            const height = document.getElementById('height').value;
+            const size = `${width}x${height}`;
+            
+            hideError();
+            hideResult();
+            
+            try {
+                const url = `${API_BASE}?data=${encodeURIComponent(data)}&size=${size}`;
+                
+                // Test if the URL is accessible
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    showError(`Error: ${response.status} - ${errorData}`);
+                    return;
+                }
+                
+                // Display the QR code
+                const qrImage = document.getElementById('qrImage');
+                qrImage.src = url;
+                qrImage.onload = function() {
+                    showResult();
+                    
+                    // Set download link
+                    const downloadLink = document.getElementById('downloadLink');
+                    downloadLink.href = url;
+                    downloadLink.download = `qr-code-${Date.now()}.png`;
+                };
+                
+            } catch (error) {
+                showError(`Failed to generate QR code: ${error.message}`);
+            }
+        });
+        
+        function fillExample(data) {
+            document.getElementById('data').value = data;
+        }
+        
+        function showResult() {
+            document.getElementById('result').style.display = 'block';
+        }
+        
+        function hideResult() {
+            document.getElementById('result').style.display = 'none';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
