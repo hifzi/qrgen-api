@@ -4,7 +4,7 @@ const http = require('http');
 
 const BASE_URL = 'http://localhost:8080';
 
-// Enhanced test cases with custom options
+// test cases with custom options
 const testCases = [
     {
         name: 'Default Settings (300x300)',
@@ -32,43 +32,43 @@ const testCases = [
     },
     {
         name: 'High Error Correction Level',
-        url: '/api/qr?data=test&errorLevel=H',
+        url: '/api/qr?data=test&el=H',
         expectedStatus: 200,
         expectedContentType: 'image/png'
     },
     {
         name: 'Low Error Correction Level',
-        url: '/api/qr?data=test&errorLevel=L',
+        url: '/api/qr?data=test&el=L',
         expectedStatus: 200,
         expectedContentType: 'image/png'
     },
     {
         name: 'Quartile Error Correction Level',
-        url: '/api/qr?data=test&errorLevel=Q',
+        url: '/api/qr?data=test&el=Q',
         expectedStatus: 200,
         expectedContentType: 'image/png'
     },
     {
         name: 'Custom Red Dark Color',
-        url: '/api/qr?data=test&darkColor=%23FF0000',
+        url: '/api/qr?data=test&darkColor=FF0000',
         expectedStatus: 200,
         expectedContentType: 'image/png'
     },
     {
         name: 'Custom Blue Dark with Yellow Light',
-        url: '/api/qr?data=test&darkColor=%230000FF&lightColor=%23FFFF00',
+        url: '/api/qr?data=test&darkColor=0000FF&lightColor=FFFF00',
         expectedStatus: 200,
         expectedContentType: 'image/png'
     },
     {
         name: 'All Custom Options Combined',
-        url: '/api/qr?data=example.com&size=500x500&margin=3&errorLevel=H&darkColor=%23800080&lightColor=%23E0E0E0',
+        url: '/api/qr?data=example.com&size=500x500&margin=3&el=H&darkColor=800080&lightColor=E0E0E0',
         expectedStatus: 200,
         expectedContentType: 'image/png'
     },
     {
         name: 'Data URL with Custom Options',
-        url: '/api/qr/url?data=test&size=200x200&margin=2&errorLevel=H&darkColor=%23008000',
+        url: '/api/qr/url?data=test&size=200x200&margin=2&el=H&darkColor=008000',
         expectedStatus: 200,
         expectedContentType: 'application/json'
     },
@@ -80,7 +80,7 @@ const testCases = [
     },
     {
         name: 'Invalid Error Level',
-        url: '/api/qr?data=test&errorLevel=X',
+        url: '/api/qr?data=test&el=X',
         expectedStatus: 200, // Should use default error level
         expectedContentType: 'image/png'
     },
@@ -170,7 +170,7 @@ async function runTest(testCase) {
 }
 
 async function runAllTests() {
-    console.log('🧪 Starting Enhanced QRGen API Tests\\n');
+    console.log('🧪 Starting QRGen API Tests\\n');
     
     const results = [];
     let passed = 0;
@@ -194,13 +194,13 @@ async function runAllTests() {
         }
     }
     
-    console.log('\\n📊 Enhanced Test Results Summary:');
+    console.log('\\n📊 Test Results Summary:');
     console.log(`✅ Passed: ${passed}`);
     console.log(`❌ Failed: ${failed}`);
     console.log(`📈 Total: ${testCases.length}`);
     
     console.log('\\n🔧 Features Tested:');
-    console.log('   • Default settings (300x300, margin=1, errorLevel=M)');
+    console.log('   • Default settings (300x300, margin=1, el=M)');
     console.log('   • Custom dimensions and margin (0-10)');
     console.log('   • Error correction levels (L, M, Q, H)');
     console.log('   • Custom colors (hex format validation)');
@@ -209,7 +209,7 @@ async function runAllTests() {
     console.log('   • Input validation and fallbacks');
     
     if (failed === 0) {
-        console.log('\\n🎉 All enhanced tests passed! QRGen API with custom options is working correctly.');
+        console.log('\\n🎉 All tests passed! QRGen API with custom options is working correctly.');
     } else {
         console.log(`\\n⚠️  ${failed} test(s) failed. Please check the issues above.`);
     }

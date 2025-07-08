@@ -20,7 +20,7 @@ Welcome to **QRGen API**! This project provides a robust and easy-to-use API for
 
 **Request:**
 ```
-http://localhost:8080/api/qr/url?data=example.com&size=300x300&margin=1&errorLevel=M
+http://localhost:8080/api/qr/url?data=example.com&size=300x300&margin=1&el=M
 ```
 
 **Response:**
@@ -85,7 +85,14 @@ You can install and run QRGen API in two ways:
 You can run QRGen API instantly using Docker:
 
 ```bash
-docker run --name qrgen-api -p 8080:8080 -e PORT=8080 hifzirs/qrgen-api:latest
+docker run --name qrgen-api \
+  -e NODE_ENV=production \
+  -e GENERAL_LIMIT_MAX=225 \
+  -e QR_LIMIT_MAX=60 \
+  -e STRICT_LIMIT_MAX=10 \
+  -p 8080:8080 \
+  --restart=always \
+  hifzirs/qrgen-api:latest
 ```
 
 - Change the left port (`8080`) to any port you want on your machine.
@@ -98,7 +105,7 @@ To start the server, run one of the following commands:
 
 **Production mode:**
 ```bash
-npm start
+npm start # or npm run start:env
 ```
 
 **Development mode (with auto-reload):**
@@ -124,27 +131,42 @@ Creates a 300x300 QR code with default settings.
 
 ### High-Security QR Code
 ```
-GET /api/qr?data=sensitive-data&errorLevel=H&margin=3
+GET /api/qr?data=sensitive-data&el=H&margin=3
 ```
 Creates a QR code with high error correction (30% recovery) and extra margin.
 
 ### Branded QR Code
 ```
-GET /api/qr?data=company.com&darkColor=%23FF6B35&lightColor=%23F7F7F7&size=500x500
+GET /api/qr?data=company.com&color=FF6B35&bgcolor=F7F7F7&size=500x500
 ```
 Creates a branded QR code with custom orange color and light gray background.
 
 ### Compact QR Code
 ```
-GET /api/qr?data=short.ly/abc&size=150x150&margin=0&errorLevel=L
+GET /api/qr?data=short.ly/abc&size=150x150&margin=0&el=L
 ```
 Creates a minimal QR code with no margin and low error correction for space-saving.
 
 ### URL with Custom Options
 ```
-GET /api/qr/url?data=example.com&size=400x400&margin=2&errorLevel=Q&darkColor=%23000080
+GET /api/qr/url?data=example.com&size=400x400&margin=2&el=Q&color=000080
 ```
 Returns a base64 data URL for embedding in HTML/CSS.
+
+### Batch QR Code (POST)
+```
+POST /api/qr/batch
+Content-Type: application/json
+
+{
+  "requests": [
+    { "data": "batch-test-1", "size": "200x200" },
+    { "data": "batch-test-2", "size": "300x300" },
+    { "data": "batch-test-3", "size": "400x400" }
+  ]
+}
+```
+Creates multiple QR codes in a single request (max 50 per batch).
 
 ## API
 
@@ -158,9 +180,9 @@ Returns a base64 data URL for embedding in HTML/CSS.
 - `data`: The data to encode in the QR code (required).
 - `size`: The size of the QR code in format "WIDTHxHEIGHT" (optional, default is `300x300`).
 - `margin`: The margin size around the QR code (optional, 0-10, default is `1`).
-- `errorLevel`: Error correction level (optional, L/M/Q/H, default is `M`).
-- `darkColor`: Dark color in hex format (optional, default is `#000000`).
-- `lightColor`: Light color in hex format (optional, default is `#FFFFFF`).
+- `el`: Error correction level (optional, L/M/Q/H, default is `M`).
+- `color`: Color in hex format (optional, default is `#000000`).
+- `bgcolor`: Background color in hex format (optional, default is `#FFFFFF`).
 
 **Size Limits:**
 - Minimum: `50x50` pixels
@@ -176,9 +198,9 @@ Returns a base64 data URL for embedding in HTML/CSS.
 **Example Requests:**
 ```
 http://localhost:8080/api/qr?data=example.com&size=300x300
-http://localhost:8080/api/qr?data=Hello%20World&margin=2&errorLevel=H
-http://localhost:8080/api/qr?data=example.com&size=400x400&darkColor=%23FF0000&lightColor=%23FFFF00
-http://localhost:8080/api/qr?data=test&size=200x200&margin=0&errorLevel=L
+http://localhost:8080/api/qr?data=Hello%20World&margin=2&el=H
+http://localhost:8080/api/qr?data=example.com&size=400x400&color=FF0000&bgcolor=FFFF00
+http://localhost:8080/api/qr?data=test&size=200x200&margin=0&el=L
 ```
 
 **Response:**
@@ -207,6 +229,72 @@ http://localhost:8080/api/qr/url?data=example.com&size=300x300
     "size": "300x300",
     "content": "example.com"
   }
+}
+```
+
+### Batch QR Code Generation
+
+**Endpoint:** `/api/qr/batch`
+
+**Method:** `POST`
+
+**Request Body:**
+```json
+{
+  "requests": [
+    { "data": "batch-test-1", "size": "200x200" },
+    { "data": "batch-test-2", "size": "300x300" },
+    { "data": "batch-test-3", "size": "400x400" }
+  ]
+}
+```
+
+- Maximum 50 requests per batch.
+- Each request object supports the same parameters as `/api/qr`.
+
+**Example Request:**
+```
+POST /api/qr/batch
+Content-Type: application/json
+
+{
+  "requests": [
+    { "data": "batch-test-1", "size": "200x200" },
+    { "data": "batch-test-2", "size": "300x300" },
+    { "data": "batch-test-3", "size": "400x400" }
+  ]
+}
+```
+
+**Example Response:**
+```json
+{
+  "success": true,
+  "processed": 3,
+  "successful": 3,
+  "failed": 0,
+  "results": [
+    {
+      "index": 0,
+      "success": true,
+      "data": {
+        "url": "data:image/png;base64,...",
+        "size": "200x200",
+        "content": "batch-test-1"
+      }
+    },
+    // ...
+  ]
+}
+```
+
+**Error Response (Batch Too Large):**
+```json
+{
+  "error": "Batch size too large",
+  "message": "Maximum 50 requests per batch",
+  "received": 60,
+  "maximum": 50
 }
 ```
 
@@ -262,6 +350,71 @@ A user-friendly web interface is available at `http://localhost:8080` for testin
 - Quick example buttons
 - Download functionality
 - Error handling display
+
+## 🔧 Configuration (Rate Limiting)
+
+You can configure rate limiting for the API via environment variables, both in Node.js and Docker:
+
+### Node.js (Local Development)
+Set environment variables before running the server:
+
+```sh
+export GENERAL_LIMIT_MAX=225
+export QR_LIMIT_MAX=60
+export STRICT_LIMIT_MAX=10
+npm start 
+```
+
+Or use a `.env` file (see `env.example` for a template) with [dotenv](https://www.npmjs.com/package/dotenv):
+
+```
+PORT=8080
+NODE_ENV=development
+GENERAL_LIMIT_MAX=225
+QR_LIMIT_MAX=60
+STRICT_LIMIT_MAX=10
+```
+
+Copy `env.example` to `.env` and adjust values as needed:
+
+```sh
+cp env.example .env
+```
+
+### Docker
+Set environment variables using `-e` flags:
+
+```sh
+docker run --name qrgen-api \
+  -e NODE_ENV=production \
+  -e GENERAL_LIMIT_MAX=225 \
+  -e QR_LIMIT_MAX=60 \
+  -e STRICT_LIMIT_MAX=10 \
+  -p 8080:8080 \
+  --restart=always \
+  hifzirs/qrgen-api:latest
+```
+
+You can also use Docker Compose (with autostart):
+
+```yaml
+services:
+  qrgen-api:
+    image: hifzirs/qrgen-api:latest
+    container_name: qrgen-api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - GENERAL_LIMIT_MAX=225
+      - QR_LIMIT_MAX=60
+      - STRICT_LIMIT_MAX=10
+```
+
+**Default values** (if not set):
+- `GENERAL_LIMIT_MAX`: 225 requests per 15 minutes
+- `QR_LIMIT_MAX`: 60 requests per minute
+- `STRICT_LIMIT_MAX`: 10 requests per minute
 
 ## Contributing
 

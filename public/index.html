@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRGen API - Test Interface</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='56'%3E%F0%9F%94%B3%3C/text%3E%3C/svg%3E">
     <style>
         :root {
             --primary-color: #007bff;
@@ -78,68 +79,143 @@
         }
 
         /* Form Styling */
+        .main-form {
+            flex: 1 1 320px;
+            min-width: 280px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            padding: 22px 18px 18px 18px;
+            margin-bottom: 0;
+        }
+
+        .qr-form-card {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+            padding: 28px 24px 18px 24px;
+            margin-bottom: 0;
+            max-width: 480px;
+        }
+
+        .form-title {
+            font-size: 1.35em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            text-align: left;
+        }
+
+        .form-divider {
+            border: none;
+            border-top: 1.5px solid var(--border-color);
+            margin: 10px 0 18px 0;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 0;
+        }
+
+        .form-group.full-width {
+            flex: 1 1 100%;
+            min-width: 180px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px 18px;
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 10px 0;
+            }
+        }
+
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 14px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: #222;
+            font-size: 15px;
         }
 
         input[type="text"],
         input[type="url"],
         input[type="number"] {
             width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 8px 10px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 15px;
             box-sizing: border-box;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.2s;
+            background: #fff;
         }
 
-        input:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        input[type="color"] {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 15px;
+            background: #fff;
         }
 
         .size-group {
             display: flex;
-            gap: 15px;
+            gap: 8px;
             align-items: center;
         }
 
-        .size-group input {
-            width: 100px;
+        .size-group input[type="number"] {
+            width: 70px;
         }
 
-        button {
+        button[type="submit"],
+        .form-submit-btn {
             background: var(--primary-color);
-            color: white;
-            padding: 14px 30px;
+            color: #fff;
+            padding: 10px 0;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            margin-top: 15px;
-            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.06);
+            transition: background 0.2s, box-shadow 0.2s;
         }
 
-        button:hover {
+        button[type="submit"]:hover,
+        .form-submit-btn:hover {
             background: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 123, 255, 0.10);
         }
 
         /* Results Styling */
         .result {
-            margin-top: 30px;
+            margin-top: 0;
             text-align: center;
         }
 
@@ -263,6 +339,37 @@
             width: 24px;
             height: 24px;
         }
+
+        .main-flex {
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 800px) {
+            .main-flex {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+
+        .form-row {
+            display: flex;
+            gap: 0;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 700px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .form-row>div.form-group {
+                min-width: 100% !important;
+            }
+        }
     </style>
 </head>
 
@@ -277,51 +384,96 @@
             </div>
 
             <div id="generator" class="tab-content active">
-                <form id="qrForm">
-                    <div class="form-group">
-                        <label for="data">Data to encode (URL, text, etc.):</label>
-                        <input type="text" id="data" name="data" placeholder="Enter URL or text..." required>
+                <div class="main-flex">
+                    <div class="main-form qr-form-card">
+                        <div class="form-title">QR Code Generator</div>
+                        <hr class="form-divider">
+                        <form id="qrForm">
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label for="data">Data to encode <span class="label-desc">(URL, text, etc.)</span>:</label>
+                                    <input type="text" id="data" name="data" value="https://example.com" placeholder="Enter URL or text..." required>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Size <span class="label-desc">(pixels)</span>:</label>
+                                    <div class="size-group">
+                                        <input type="number" id="width" name="width" value="300" min="50" max="1000" required>
+                                        <span>×</span>
+                                        <input type="number" id="height" name="height" value="300" min="50" max="1000" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="margin">Margin <span class="label-desc">(0-10)</span>:</label>
+                                    <input type="number" id="margin" name="margin" value="1" min="0" max="10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="el">Error Correction:</label>
+                                    <select id="el" name="el">
+                                        <option value="L">L (Low)</option>
+                                        <option value="M" selected>M (Medium)</option>
+                                        <option value="Q">Q (Quartile)</option>
+                                        <option value="H">H (High)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Colors:</label>
+                                    <div class="size-group">
+                                        <span>Color</span>
+                                        <input type="color" id="color" name="color" value="#000000">
+                                        <span>BG</span>
+                                        <input type="color" id="bgcolor" name="bgcolor" value="#ffffff">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="form-submit-btn">Generate QR Code</button>
+                        </form>
+                        <div class="examples">
+                            <h3>📱 Quick Examples</h3>
+                            <div class="example-item" onclick="fillExample('https://example.com')">
+                                🌐 Website: example.com
+                            </div>
+                            <div class="example-item" onclick="fillExample('Hello World!')">
+                                📝 Text: Hello World!
+                            </div>
+                            <div class="example-item" onclick="fillExample('mailto:admin@example.com')">
+                                📧 Email: admin@example.com
+                            </div>
+                            <div class="example-item" onclick="fillExample('tel:+6281234567890')">
+                                📞 Phone: +6281234567890
+                            </div>
+                            <div id="api-preview" style="margin-top:10px;"></div>
+                        </div>
+                        <div id="error" class="error" style="display: none;"></div>
                     </div>
-
-                    <div class="form-group">
-                        <label>Size (pixels):</label>
-                        <div class="size-group">
-                            <input type="number" id="width" name="width" value="300" min="50" max="1000" required>
-                            <span>×</span>
-                            <input type="number" id="height" name="height" value="300" min="50" max="1000" required>
-                            <span>pixels</span>
+                    <div class="main-result">
+                        <div id="result" class="result" style="display: none;">
+                            <h3>Generated QR Code:</h3>
+                            <img id="qrImage" class="qr-image" alt="Generated QR Code">
+                            <br><br>
+                            <a id="downloadLink" href="#" download="qr-code.png">
+                                <button type="button" class="form-submit-btn">Download PNG</button>
+                            </a>
+                            <div id="api-url-examples" style="margin-top:18px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto;">
+                                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;font-weight:600;color:#007bff;">
+                                    <span style="font-size:1.2em;">🔗</span> <span>API URL</span>
+                                </div>
+                                <div style="margin:8px 0;">
+                                    <span style="font-size:13px;color:#555;font-weight:500;">Direct PNG:</span>
+                                    <button type="button" onclick="copyApiUrl('api-url-direct')" style="margin-left:8px;font-size:12px;padding:2px 10px;border-radius:5px;border:1px solid #2d3748;background:#2d3748;color:#fff;cursor:pointer;">Copy</button>
+                                    <pre class="api-section" style="background:#2d3748;color:#fff;padding:15px;border-radius:8px;overflow-x:auto;font-family:'Consolas',monospace;margin:10px 0 0 0;"><code id="api-url-direct" style="background:none;padding:0;border-radius:0;color:#fff;"></code></pre>
+                                </div>
+                                <div style="margin:8px 0;">
+                                    <span style="font-size:13px;color:#555;font-weight:500;">Data URL (JSON):</span>
+                                    <button type="button" onclick="copyApiUrl('api-url-dataurl')" style="margin-left:8px;font-size:12px;padding:2px 10px;border-radius:5px;border:1px solid #2d3748;background:#2d3748;color:#fff;cursor:pointer;">Copy</button>
+                                    <pre class="api-section" style="background:#2d3748;color:#fff;padding:15px;border-radius:8px;overflow-x:auto;font-family:'Consolas',monospace;margin:10px 0 0 0;"><code id="api-url-dataurl" style="background:none;padding:0;border-radius:0;color:#fff;"></code></pre>
+                                </div>
+                                <div id="copy-api-url-msg" style="font-size:12px;color:#28a745;margin-top:4px;display:none;">Copied!</div>
+                            </div>
                         </div>
                     </div>
-
-                    <button type="submit">Generate QR Code</button>
-                </form>
-
-                <div class="examples">
-                    <h3>📱 Quick Examples</h3>
-                    <div class="example-item" onclick="fillExample('https://example.com')">
-                        🌐 Website: example.com
-                    </div>
-                    <div class="example-item" onclick="fillExample('Hello World!')">
-                        📝 Text: Hello World!
-                    </div>
-                    <div class="example-item" onclick="fillExample('mailto:admin@example.com')">
-                        📧 Email: admin@example.com
-                    </div>
-                    <div class="example-item" onclick="fillExample('tel:+6281234567890')">
-                        📞 Phone: +6281234567890
-                    </div>
                 </div>
-
-                <div id="result" class="result" style="display: none;">
-                    <h3>Generated QR Code:</h3>
-                    <img id="qrImage" class="qr-image" alt="Generated QR Code">
-                    <br><br>
-                    <a id="downloadLink" href="#" download="qr-code.png">
-                        <button type="button">⬇️ Download PNG</button>
-                    </a>
-                </div>
-
-                <div id="error" class="error" style="display: none;"></div>
             </div>
 
             <div id="docs" class="tab-content">
@@ -335,12 +487,12 @@
                             <li><code>data</code> <i>(required)</i>: The data to encode in the QR code</li>
                             <li><code>size</code>: Size in format <code>WIDTHxHEIGHT</code> (default: 300x300)</li>
                             <li><code>margin</code>: Margin around QR code (0-10, default: 1)</li>
-                            <li><code>errorLevel</code>: Error correction level (<code>L</code>, <code>M</code>, <code>Q</code>, <code>H</code>, default: M)</li>
-                            <li><code>darkColor</code>: Dark color in hex (default: #000000)</li>
-                            <li><code>lightColor</code>: Light color in hex (default: #FFFFFF)</li>
+                            <li><code>el</code>: Error correction level (<code>L</code>, <code>M</code>, <code>Q</code>, <code>H</code>, default: M)</li>
+                            <li><code>color</code>: Color in hex (default: #000000)</li>
+                            <li><code>bgcolor</code>: Background color in hex (default: #FFFFFF)</li>
                         </ul>
                         <p><b>Example Request:</b></p>
-                        <pre><code>GET /api/qr?data=https://example.com&size=300x300&margin=2&errorLevel=H</code></pre>
+                        <pre><code>GET /api/qr?data=https://example.com&size=300x300&margin=2&el=H&color=000000&bgcolor=FFFFFF</code></pre>
                     </div>
 
                     <div class="api-section">
@@ -349,7 +501,7 @@
                         <p><b>Method:</b> <code>GET</code></p>
                         <p><b>Query Parameters:</b> <i>Same as above</i></p>
                         <p><b>Example Request:</b></p>
-                        <pre><code>GET /api/qr/url?data=Hello%20World&size=400x400&margin=1&errorLevel=Q</code></pre>
+                        <pre><code>GET /api/qr/url?data=Hello%20World&size=400x400&margin=1&el=Q&color=000000&bgcolor=FFFFFF</code></pre>
                         <p><b>Response:</b></p>
                         <pre><code>{
   "success": true,
@@ -358,6 +510,61 @@
     "size": "400x400",
     "content": "Hello World"
   }
+}</code></pre>
+                    </div>
+
+                    <div class="api-section">
+                        <h3>📦 Batch QR Code Generation</h3>
+                        <p><b>Endpoint:</b> <code>/api/qr/batch</code></p>
+                        <p><b>Method:</b> <code>POST</code></p>
+                        <p><b>Request Body:</b></p>
+                        <pre><code>{
+  "requests": [
+    { "data": "batch-test-1", "size": "200x200" },
+    { "data": "batch-test-2", "size": "300x300" },
+    { "data": "batch-test-3", "size": "400x400" }
+  ]
+}</code></pre>
+                        <ul>
+                            <li>Maximum 50 requests per batch.</li>
+                            <li>Each request object supports the same parameters as <code>/api/qr</code>.</li>
+                        </ul>
+                        <p><b>Example Request:</b></p>
+                        <pre><code>POST /api/qr/batch
+Content-Type: application/json
+
+{
+  "requests": [
+    { "data": "batch-test-1", "size": "200x200" },
+    { "data": "batch-test-2", "size": "300x300" },
+    { "data": "batch-test-3", "size": "400x400" }
+  ]
+}</code></pre>
+                        <p><b>Example Response:</b></p>
+                        <pre><code>{
+  "success": true,
+  "processed": 3,
+  "successful": 3,
+  "failed": 0,
+  "results": [
+    {
+      "index": 0,
+      "success": true,
+      "data": {
+        "url": "data:image/png;base64,...",
+        "size": "200x200",
+        "content": "batch-test-1"
+      }
+    }
+    // ...
+  ]
+}</code></pre>
+                        <p><b>Error Response (Batch Too Large):</b></p>
+                        <pre><code>{
+  "error": "Batch size too large",
+  "message": "Maximum 50 requests per batch",
+  "received": 60,
+  "maximum": 50
 }</code></pre>
                     </div>
 
@@ -419,39 +626,57 @@
 
         document.getElementById('qrForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-
             const data = document.getElementById('data').value;
             const width = document.getElementById('width').value;
             const height = document.getElementById('height').value;
             const size = `${width}x${height}`;
-
+            const margin = document.getElementById('margin').value;
+            const el = document.getElementById('el').value;
+            const color = document.getElementById('color').value;
+            const bgcolor = document.getElementById('bgcolor').value;
+            // Default values
+            const defaultWidth = '300';
+            const defaultHeight = '300';
+            const defaultSize = '300x300';
+            const defaultMargin = '1';
+            const defaultEl = 'M';
+            const defaultColor = '#000000';
+            const defaultBgcolor = '#ffffff';
             hideError();
             hideResult();
-
             try {
-                const url = `${API_BASE}?data=${encodeURIComponent(data)}&size=${size}`;
-
-                // Test if the URL is accessible
+                let url = API_BASE + '?data=' + encodeURIComponent(data);
+                if (size !== defaultSize) url += `&size=${size}`;
+                if (margin !== defaultMargin) url += `&margin=${margin}`;
+                if (el !== defaultEl) url += `&el=${el}`;
+                if (color.toLowerCase() !== defaultColor) url += `&color=${color.replace('#','')}`;
+                if (bgcolor.toLowerCase() !== defaultBgcolor) url += `&bgcolor=${bgcolor.replace('#','')}`;
+                // Build also the /url endpoint
+                let urlBase = API_BASE.replace(/\/api\/qr$/, '');
+                let urlData = urlBase + '/api/qr/url?data=' + encodeURIComponent(data);
+                if (size !== defaultSize) urlData += `&size=${size}`;
+                if (margin !== defaultMargin) urlData += `&margin=${margin}`;
+                if (el !== defaultEl) urlData += `&el=${el}`;
+                if (color.toLowerCase() !== defaultColor) urlData += `&color=${color.replace('#','')}`;
+                if (bgcolor.toLowerCase() !== defaultBgcolor) urlData += `&bgcolor=${bgcolor.replace('#','')}`;
+                // Set API URLs in result
+                document.getElementById('api-url-direct').textContent = url.replace(window.location.origin, '');
+                document.getElementById('api-url-dataurl').textContent = urlData.replace(window.location.origin, '');
+                // Fetch and show QR
                 const response = await fetch(url);
-
                 if (!response.ok) {
                     const errorData = await response.text();
                     showError(`Error: ${response.status} - ${errorData}`);
                     return;
                 }
-
-                // Display the QR code
                 const qrImage = document.getElementById('qrImage');
                 qrImage.src = url;
                 qrImage.onload = function () {
                     showResult();
-
-                    // Set download link
                     const downloadLink = document.getElementById('downloadLink');
                     downloadLink.href = url;
                     downloadLink.download = `qr-code-${Date.now()}.png`;
                 };
-
             } catch (error) {
                 showError(`Failed to generate QR code: ${error.message}`);
             }
@@ -477,6 +702,51 @@
 
         function hideError() {
             document.getElementById('error').style.display = 'none';
+        }
+
+        function showApiPreview(apiPath) {
+            const previewDiv = document.getElementById('api-preview');
+            previewDiv.innerHTML = 'Loading...';
+            const isUrlApi = apiPath.includes('/url');
+            const fullUrl = (window.API_BASE ? window.API_BASE.replace(/\/api\/qr$/, '') : window.location.origin) + apiPath;
+            fetch(fullUrl)
+                .then(async res => {
+                    if (isUrlApi) {
+                        const json = await res.json();
+                        if (json.success && json.data && json.data.url) {
+                            previewDiv.innerHTML = `<img src='${json.data.url}' style='max-width:120px;display:block;margin:10px auto 5px auto;border:1px solid #ccc;border-radius:6px;'>` +
+                                `<pre style='background:#f8f9fa;color:#333;text-align:left;'>${JSON.stringify(json, null, 2)}</pre>`;
+                        } else {
+                            previewDiv.innerHTML = `<pre style='background:#f8f9fa;color:#333;text-align:left;'>${JSON.stringify(json, null, 2)}</pre>`;
+                        }
+                    } else {
+                        if (res.ok) {
+                            const blob = await res.blob();
+                            const imgUrl = URL.createObjectURL(blob);
+                            previewDiv.innerHTML = `<img src='${imgUrl}' style='max-width:120px;display:block;margin:10px auto 5px auto;border:1px solid #ccc;border-radius:6px;'>` +
+                                `<div style='font-size:13px;color:#555;text-align:center;'>PNG Image</div>`;
+                        } else {
+                            const text = await res.text();
+                            previewDiv.innerHTML = `<pre style='background:#f8f9fa;color:#333;text-align:left;'>${text}</pre>`;
+                        }
+                    }
+                })
+                .catch(err => {
+                    previewDiv.innerHTML = `<span style='color:#dc3545;'>Failed to fetch: ${err.message}</span>`;
+                });
+        }
+
+        function copyApiUrl(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const text = el.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const msg = document.getElementById('copy-api-url-msg');
+                if (msg) {
+                    msg.style.display = 'inline';
+                    setTimeout(() => { msg.style.display = 'none'; }, 1200);
+                }
+            });
         }
     </script>
 </body>
